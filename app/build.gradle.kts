@@ -1,10 +1,8 @@
 plugins {
     id("java")
-    application
     id("checkstyle")
     jacoco
 }
-application { mainClass.set("hexlet.code.App") }
 
 group = "hexlet.code"
 version = "1.0-SNAPSHOT"
