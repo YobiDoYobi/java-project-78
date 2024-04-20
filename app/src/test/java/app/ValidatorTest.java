@@ -76,7 +76,7 @@ public class ValidatorTest {
     }
 
     @Test
-    void testShape() {
+    void testShapeString() {
         var v = new Validator();
         //var schema = v.map();
         MapSchema<String> schema = v.map();
@@ -107,5 +107,39 @@ public class ValidatorTest {
         human3.put("firstName", "Anna");
         human3.put("lastName", "B");
         assertThat(schema.isValid(human3)).isFalse();
+    }
+
+    @Test
+    void testShapeNumber() {
+        var v = new Validator();
+        //var schema = v.map();
+        MapSchema<Integer> schema = v.map();
+        // shape позволяет описывать валидацию для значений каждого ключа объекта Map
+        // Создаем набор схем для проверки каждого ключа проверяемого объекта
+        // Для значения каждого ключа - своя схема
+        Map<String, BaseSchema<Integer>> schemas = new HashMap<>();
+        // Определяем схемы валидации для значений свойств "firstName" и "lastName"
+        // Имя должно быть строкой, обязательно для заполнения
+        schemas.put("1", v.number().required());
+        // Фамилия обязательна для заполнения и должна содержать не менее 2 символов
+        schemas.put("2", v.number().positive());
+        // Настраиваем схему `MapSchema`
+        // Передаем созданный набор схем в метод shape()
+        schema.shape(schemas);
+        // Проверяем объекты
+        Map<String, Integer> data1 = new HashMap<>();
+        data1.put("1", 23);
+        data1.put("2", -3);
+        assertThat(schema.isValid(data1)).isFalse();
+
+        Map<String, Integer> data2 = new HashMap<>();
+        data2.put("1", 23);
+        data2.put("2", 1);
+        assertThat(schema.isValid(data2)).isTrue();
+
+        /*Map<String, String> human3 = new HashMap<>();
+        human3.put("firstName", "Anna");
+        human3.put("lastName", "B");
+        assertThat(schema.isValid(human3)).isFalse();*/
     }
 }
