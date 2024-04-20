@@ -1,19 +1,20 @@
 package hexlet.code.schemas;
 
-public class NumberSchema extends BaseSchema {
+import java.util.Objects;
+
+public class NumberSchema extends BaseSchema<Integer> {
     public NumberSchema required() {
-        //addCheck("required", integer -> ((Integer) integer) != null);
-        addCheck("required", i -> i instanceof Integer);
+        addCheck("required", Objects::nonNull);
         return this;
     }
 
     public NumberSchema positive() {
-        addCheck("positive", i -> i == null || ((int) i) > 0);
+        addCheck("positive", i -> i == null || i > 0);
         return this;
     }
 
     public NumberSchema range(int minRangeIn, int maxRangeIn) {
-        addCheck("range", i -> ((Integer) i) >= minRangeIn && ((Integer) i) <= maxRangeIn);
+        addCheck("range", i -> i >= minRangeIn && i <= maxRangeIn);
         return this;
     }
 }
