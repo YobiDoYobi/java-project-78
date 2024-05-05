@@ -1,14 +1,14 @@
 package hexlet.code.schemas;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.function.Predicate;
 
 public class BaseSchema<T> {
-    protected final Map<String, Predicate<T>> checks;
+    protected final LinkedHashMap<String, Predicate<T>> checks;
+    protected boolean required;
 
     protected BaseSchema() {
-        this.checks = new HashMap<>();
+        this.checks = new LinkedHashMap<>();
     }
 
     protected final void addCheck(String name, Predicate<T> check) {
@@ -16,6 +16,9 @@ public class BaseSchema<T> {
     }
 
     public final boolean isValid(T object) {
-        return checks.values().stream().allMatch(check -> check.test(object));
+        if (required || checks.firstEntry().getValue().test(object)) {
+            return checks.values().stream().allMatch(check -> check.test(object));
+        }
+        return true;
     }
 }

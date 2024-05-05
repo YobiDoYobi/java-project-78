@@ -3,6 +3,7 @@ package app;
 import hexlet.code.Validator;
 import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.MapSchema;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -10,58 +11,18 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ValidatorTest {
-    @Test
-    void testString() {
-        var v = new Validator();
-        var schema = v.string();
-        assertThat(schema.isValid(null)).isTrue();
-        assertThat(schema.isValid("")).isTrue();
+public class ValidatorMapTest {
+    private static Validator v;
+    private static MapSchema schema;
 
-        schema.required();
-        assertThat(schema.isValid(null)).isFalse();
-        assertThat(schema.isValid("")).isFalse();
-        assertThat(schema.isValid("what does the fox say")).isTrue();
-        assertThat(schema.isValid("hexlet")).isTrue();
-
-        assertThat(schema.contains("wh").isValid("what does the fox say")).isTrue();
-        assertThat(schema.contains("what").isValid("what does the fox say")).isTrue();
-        assertThat(schema.contains("whatthe").isValid("what does the fox say")).isFalse();
-        assertThat(schema.isValid("what does the fox say")).isFalse();
-        // Здесь уже false, так как добавлена еще одна проверка contains("whatthe")
-
-        // Если один валидатор вызывался несколько раз
-        // то последний имеет приоритет (перетирает предыдущий)
-        var schema1 = v.string();
-        schema1.minLength(10).minLength(4).isValid("Hexlet"); // true
+    @BeforeEach
+    public void beforeEach() {
+        v = new Validator();
+        schema = v.map();
     }
 
     @Test
-    void testInteger() {
-        var v = new Validator();
-        var schema = v.number();
-        assertThat(schema.isValid(5)).isTrue();
-        // Пока не вызван метод required(), null считается валидным
-        assertThat(schema.isValid(null)).isTrue();
-        assertThat(schema.positive().isValid(null)).isTrue();
-        schema.required();
-        assertThat(schema.isValid(null)).isFalse();
-        assertThat(schema.isValid(10)).isTrue();
-        // Потому что ранее мы вызвали метод positive()
-        assertThat(schema.isValid(-10)).isFalse();
-        //  Ноль — не положительное число
-        assertThat(schema.isValid(0)).isFalse();
-        schema.range(5, 10);
-        assertThat(schema.isValid(5)).isTrue();
-        assertThat(schema.isValid(10)).isTrue();
-        assertThat(schema.isValid(4)).isFalse();
-        assertThat(schema.isValid(11)).isFalse();
-    }
-
-    @Test
-    void testMap() {
-        var v = new Validator();
-        MapSchema<String> schema = v.map();
+    void testSimpleMapRequired() {
         assertThat(schema.isValid(null)).isTrue();
         schema.required();
         assertThat(schema.isValid(null)).isFalse();
@@ -69,17 +30,22 @@ public class ValidatorTest {
         Map<String, String> data = new HashMap<>();
         data.put("key1", "value1");
         assertThat(schema.isValid(data)).isTrue();
+    }
+
+    @Test
+    void testSimpleMapSizeof() {
         schema.sizeof(2);
+        Map<String, String> data = new HashMap<>();
+        assertThat(schema.isValid(data)).isFalse();
+        data.put("key1", "value1");
         assertThat(schema.isValid(data)).isFalse();
         data.put("key2", "value2");
         assertThat(schema.isValid(data)).isTrue();
+        assertThat(schema.isValid(null)).isTrue();
     }
 
     @Test
     void testShapeString() {
-        var v = new Validator();
-        //var schema = v.map();
-        MapSchema<String> schema = v.map();
         // shape позволяет описывать валидацию для значений каждого ключа объекта Map
         // Создаем набор схем для проверки каждого ключа проверяемого объекта
         // Для значения каждого ключа - своя схема
@@ -107,13 +73,13 @@ public class ValidatorTest {
         human3.put("firstName", "Anna");
         human3.put("lastName", "B");
         assertThat(schema.isValid(human3)).isFalse();
+        assertThat(schema.isValid(null)).isTrue();
+        schema.required();
+        assertThat(schema.isValid(null)).isFalse();
     }
 
     @Test
     void testShapeNumber() {
-        var v = new Validator();
-        //var schema = v.map();
-        MapSchema<Integer> schema = v.map();
         // shape позволяет описывать валидацию для значений каждого ключа объекта Map
         // Создаем набор схем для проверки каждого ключа проверяемого объекта
         // Для значения каждого ключа - своя схема
@@ -122,7 +88,7 @@ public class ValidatorTest {
         // Имя должно быть строкой, обязательно для заполнения
         schemas.put("1", v.number().required());
         // Фамилия обязательна для заполнения и должна содержать не менее 2 символов
-        schemas.put("2", v.number().positive());
+        schemas.put("2", v.number().required().positive());
         // Настраиваем схему `MapSchema`
         // Передаем созданный набор схем в метод shape()
         schema.shape(schemas);
@@ -136,10 +102,8 @@ public class ValidatorTest {
         data2.put("1", 23);
         data2.put("2", 1);
         assertThat(schema.isValid(data2)).isTrue();
-
-        /*Map<String, String> human3 = new HashMap<>();
-        human3.put("firstName", "Anna");
-        human3.put("lastName", "B");
-        assertThat(schema.isValid(human3)).isFalse();*/
+        assertThat(schema.isValid(null)).isTrue();
+        schema.required();
+        assertThat(schema.isValid(null)).isFalse();
     }
 }

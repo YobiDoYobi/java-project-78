@@ -2,7 +2,7 @@ package hexlet.code.schemas;
 
 public class StringSchema extends BaseSchema<String> {
     public StringSchema minLength(int minLengthIn) {
-        addCheck("minLength", s -> s != null && s.length() > minLengthIn);
+        addCheck("minLength", s -> s.length() > minLengthIn);
         return this;
     }
 
@@ -12,7 +12,11 @@ public class StringSchema extends BaseSchema<String> {
     }
 
     public StringSchema required() {
-        addCheck("required", s -> s != null && !s.isEmpty());
+        super.required = true;
         return this;
+    }
+
+    public StringSchema() {
+        addCheck("requiredString", s -> s != null && !s.isEmpty());
     }
 }
