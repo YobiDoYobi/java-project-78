@@ -1,5 +1,6 @@
 package hexlet.code.schemas;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -36,6 +37,7 @@ public class MapSchema extends BaseSchema<Map<?, ?>> {
     }
 
     public MapSchema() {
+        super.checks = new LinkedHashMap<>();
         addCheck("requiredMap", Objects::nonNull);
     }
 }

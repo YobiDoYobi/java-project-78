@@ -4,12 +4,12 @@ import java.util.LinkedHashMap;
 import java.util.function.Predicate;
 
 public class BaseSchema<T> {
-    protected final LinkedHashMap<String, Predicate<T>> checks;
+    protected LinkedHashMap<String, Predicate<T>> checks;
     protected boolean required;
 
-    protected BaseSchema() {
+    /*protected BaseSchema() {
         this.checks = new LinkedHashMap<>();
-    }
+    }*/
 
     protected final void addCheck(String name, Predicate<T> check) {
         checks.put(name, check);

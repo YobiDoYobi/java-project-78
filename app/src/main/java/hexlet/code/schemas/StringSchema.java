@@ -1,5 +1,7 @@
 package hexlet.code.schemas;
 
+import java.util.LinkedHashMap;
+
 public class StringSchema extends BaseSchema<String> {
     public StringSchema minLength(int minLengthIn) {
         addCheck("minLength", s -> s.length() > minLengthIn);
@@ -17,6 +19,7 @@ public class StringSchema extends BaseSchema<String> {
     }
 
     public StringSchema() {
+        super.checks = new LinkedHashMap<>();
         addCheck("requiredString", s -> s != null && !s.isEmpty());
     }
 }
