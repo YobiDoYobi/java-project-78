@@ -1,6 +1,5 @@
 package hexlet.code.schemas;
 
-import java.util.LinkedHashMap;
 import java.util.Objects;
 
 public class NumberSchema extends BaseSchema<Integer> {
@@ -20,7 +19,6 @@ public class NumberSchema extends BaseSchema<Integer> {
     }
 
     public NumberSchema() {
-        super.checks = new LinkedHashMap<>();
         addCheck("requiredNumber", Objects::nonNull);
     }
 }
