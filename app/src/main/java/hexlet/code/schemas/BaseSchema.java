@@ -15,7 +15,7 @@ public class BaseSchema<T> {
         checks.put(name, check);
     }
 
-    final public boolean isValid(T object) {
+    public final boolean isValid(T object) {
         if (required || checks.firstEntry().getValue().test(object)) {
             return checks.values().stream().allMatch(check -> check.test(object));
         }
