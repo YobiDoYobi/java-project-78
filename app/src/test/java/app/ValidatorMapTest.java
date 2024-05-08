@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ValidatorMapTest {
+public final class ValidatorMapTest {
     private Validator v;
     private MapSchema schema;
 

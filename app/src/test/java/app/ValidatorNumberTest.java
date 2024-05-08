@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ValidatorNumberTest {
+public final class ValidatorNumberTest {
     private NumberSchema schema;
 
     @BeforeEach
