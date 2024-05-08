@@ -7,7 +7,7 @@ public class StringSchema extends BaseSchema<String> {
     }
 
     public StringSchema contains(String subStrIn) {
-        addCheck("contains", s -> s.startsWith(subStrIn));
+        addCheck("contains", s -> s.contains(subStrIn));
         return this;
     }
 

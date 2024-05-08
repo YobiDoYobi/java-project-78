@@ -8,12 +8,11 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValidatorStringTest {
-    private static Validator v;
-    private static StringSchema schema;
+    private StringSchema schema;
 
     @BeforeEach
     public void beforeEach() {
-        v = new Validator();
+        Validator v = new Validator();
         schema = v.string();
     }
 
@@ -40,7 +39,8 @@ public class ValidatorStringTest {
         assertThat(schema.contains("wh").isValid("what does the fox say")).isTrue();
         assertThat(schema.contains("what").isValid("what does the fox say")).isTrue();
         assertThat(schema.contains("whatthe").isValid("what does the fox say")).isFalse();
-        assertThat(schema.isValid("what does the fox say")).isFalse();
+        assertThat(schema.contains("do").isValid("what does the fox say")).isTrue();
+        assertThat(schema.isValid("what does the fox say")).isTrue();
         // Здесь уже false, так как добавлена еще одна проверка contains("whatthe")
     }
 
