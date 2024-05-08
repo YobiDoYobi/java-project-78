@@ -12,7 +12,7 @@ public final class StringSchema extends BaseSchema<String> {
     }
 
     public StringSchema required() {
-        super.required = true;
+        setRequired(true);
         return this;
     }
 

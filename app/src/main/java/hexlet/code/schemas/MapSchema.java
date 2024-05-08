@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public final class MapSchema extends BaseSchema<Map<?, ?>> {
     public MapSchema required() {
-        super.required = true;
+        setRequired(true);
         return this;
     }
 

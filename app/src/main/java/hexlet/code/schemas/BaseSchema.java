@@ -5,17 +5,17 @@ import java.util.function.Predicate;
 
 public class BaseSchema<T> {
     private LinkedHashMap<String, Predicate<T>> checks = new LinkedHashMap<>();;
-    boolean required;
+    private boolean required;
 
-    /*protected BaseSchema() {
-        this.checks = new LinkedHashMap<>();
-    }*/
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
 
-    void addCheck(String name, Predicate<T> check) {
+    final void addCheck(String name, Predicate<T> check) {
         checks.put(name, check);
     }
 
-    public boolean isValid(T object) {
+    final public boolean isValid(T object) {
         if (required || checks.firstEntry().getValue().test(object)) {
             return checks.values().stream().allMatch(check -> check.test(object));
         }

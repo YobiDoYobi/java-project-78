@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public final class NumberSchema extends BaseSchema<Integer> {
     public NumberSchema required() {
-        super.required = true;
+        setRequired(true);
         return this;
     }
 
