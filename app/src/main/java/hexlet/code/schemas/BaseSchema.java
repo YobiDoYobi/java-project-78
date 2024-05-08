@@ -7,8 +7,8 @@ public class BaseSchema<T> {
     private LinkedHashMap<String, Predicate<T>> checks = new LinkedHashMap<>();;
     private boolean required;
 
-    protected void setRequired(boolean required) {
-        this.required = required;
+    protected final void setRequired(boolean requiredIn) {
+        this.required = requiredIn;
     }
 
     final void addCheck(String name, Predicate<T> check) {
